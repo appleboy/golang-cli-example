@@ -12,6 +12,7 @@ type (
 	Config struct {
 		username string
 		password string
+		Remove   bool
 	}
 )
 
@@ -33,6 +34,11 @@ func main() {
 			Usage:  "user password",
 			EnvVar: "DOCKER_PASSWORD",
 		},
+		cli.BoolFlag{
+			Name:   "rm,r",
+			Usage:  "remove target folder before upload data",
+			EnvVar: "PLUGIN_RM",
+		},
 	}
 
 	app.Run(os.Args)
@@ -42,6 +48,7 @@ func run(c *cli.Context) error {
 	config = Config{
 		username: c.String("username"),
 		password: c.String("password"),
+		Remove:   c.Bool("rm"),
 	}
 
 	return exec()
@@ -50,6 +57,10 @@ func run(c *cli.Context) error {
 func exec() error {
 	fmt.Println("username:", config.username)
 	fmt.Println("password:", config.password)
+
+	if config.Remove {
+		fmt.Println("Remove all files.")
+	}
 
 	return nil
 }
